@@ -1,23 +1,46 @@
 <template>
-  <v-card>
+  <v-card 
+    class="mx-auto my-12"
+    max-width="374">
+
+    <template slot="progress">
+      <v-progress-linear
+        color="purple-deep" height="10"
+        indeterminate></v-progress-linear>
+    </template>
+
     <v-img
       height="250"
-      src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-    ></v-img>
-    <v-card-title>Raichu</v-card-title>
+      :src="pokeImg"></v-img>
+    
+    <v-card-title>{{ name }}</v-card-title>
+    
     <v-card-text>
       <div>
-        Attack Trueno
-      </div>
-      <div>
-        Envestida
+        {{ ability }}
       </div>
     </v-card-text>
+  
   </v-card>
 </template>
 
 <script>
   export default {
+    props: [
+      'name',
+      'pokeImg',
+      'ability'
+      ],
+    data: () =>({
+      loading: false,
+    }),
+    methods: {
+      PokeEvolution () {
+        this.loading = true
+
+        setTimeout( ()=> ( this.loading = false ), 2000 )
+      }
+    },
 
   }
 </script>
