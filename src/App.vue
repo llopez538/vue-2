@@ -29,6 +29,15 @@
 </template>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+
+const pokemonApi = axios.create({
+    baseURL: 'https://pokeapi.co/api/v2/pokemon'
+})
+
+Vue.prototype.$pokemonApi = pokemonApi
+
 export default {
   name: 'App',
   data() {

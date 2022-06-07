@@ -9,35 +9,48 @@
         indeterminate></v-progress-linear>
     </template>
 
-    <v-img
-      height="250"
-      :src="pokeImg"></v-img>
-    
-    <v-card-title>{{ name }}</v-card-title>
-    
-    <v-card-text>
-      <div>
-        {{ ability }}
-      </div>
-    </v-card-text>
+    <div v-if="pokemonInfo">
+      <v-img
+        :src="pokemonInfo.sprites.front_default"></v-img>
+      
+      <v-card-title>
+        {{ pokemonInfo.name }}
+      </v-card-title>
+      
+      <v-card-text>
+        <v-card-title>
+          Tipo:
+        </v-card-title>
+        <div>
+          {{ pokemonInfo.species.name }}
+        </div>
+      </v-card-text>
+    </div>
   
   </v-card>
 </template>
 
 <script>
+import pokemonApi from "@/api/pokemonApi";
   export default {
-    props: [
-      'name',
-      'pokeImg',
-      'ability'
-      ],
-    data: () =>({
-      loading: false,
-    }),
+    props: {
+      dataPokemon: Object
+      },
+      mounted() {
+        this.getIfoPokemon()
+      },
+    data() {
+      return { 
+        loading: false,
+        pokemonInfo: null, 
+      }
+    },
     methods: {
+      getIfoPokemon(){
+        pokemonApi.get(`/${ this.dataPokemon.name }`).then(response => this.pokemonInfo = response.data);
+      },
       PokeEvolution () {
         this.loading = true
-
         setTimeout( ()=> ( this.loading = false ), 2000 )
       }
     },
