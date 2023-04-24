@@ -2,23 +2,24 @@
     <v-container>
         <v-row justify="center">
             <v-col cols="12" md="4">
-                <validation-observer
+                <ValidationObserver
                     ref="observer"
                     
                 >
                     <v-form @submit.prevent="submit">
-                        <validation-provider
+                        <ValidationProvider
                             v-slot="{ errors }"
                             name="Name"
+                            rules="required|max:10"
                         >
-
-                        </validation-provider>
-                        <v-text-field
-                            v-mode="name"
-                            :counter="10"
-                            :rules="nameRules"
-                            label="Name"
-                        ></v-text-field>
+                            <v-text-field
+                                v-mode="name"
+                                :counter="10"
+                                :rules="nameRules"
+                                :error-messages="errors"
+                                label="Name"
+                            ></v-text-field>
+                        </ValidationProvider>
     
                         <v-text-field
                             v-model="email"
@@ -55,7 +56,7 @@
                             Clear
                         </v-btn>
                     </v-form>
-                </validation-observer>
+                </ValidationObserver>
             </v-col>
         </v-row>
     </v-container>
@@ -63,10 +64,33 @@
 
 <script>
 import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
-import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import { configure, extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+
+const config = {
+  classes: {
+    valid: 'is-valid',
+    invalid: 'is-invalid'
+  },
+  bails: true,
+  skipOptional: true,
+  mode: 'aggressive',
+  useConstraintAttrs: true
+};
+
+// Sets the options.
+configure(config);
+setInteractionMode('eager')
+
+extend('required', {
+    ...required,
+    message: '{_field_} can not empty'
+})
 
 export default {
-
+    components: {
+        ValidationObserver,
+        ValidationProvider
+    },
     data() {
         return {
             
